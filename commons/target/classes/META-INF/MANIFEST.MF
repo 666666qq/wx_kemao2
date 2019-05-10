@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: 不朽梦想
+Build-Jdk: 11.0.2
+Implementation-Title: commons
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: edu.gdkm
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/wx_kemao_2/commons
+Created-By: Maven Integration for Eclipse
+
