@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -76,6 +77,8 @@ public class SubscribeApplication implements //
 		}else {
 			LOG.error("利用Bean的ID{}不能找到一个消息事件的处理器！",id);
 		}
+		}catch (NoSuchBeanDefinitionException e) {
+			LOG.trace("当前模块不适合处理{} 消息，没有对应的处理器实现：",msg.getEvent());
 	}catch (Exception e) {
 		LOG.error("无法处理事件："+e.getLocalizedMessage(), e);
 	}
