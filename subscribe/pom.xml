@@ -76,7 +76,7 @@
 				
 				<fork>true</fork>
 				
-				<jmxPort>5202</jmxPort>
+				<jmxPort>5203</jmxPort>
 				</configuration>
 			</plugin>
 		</plugins>
