@@ -55,7 +55,7 @@ public class AccessTokenManagerSample implements AccessTokenManager{
 				}
 				
 		}finally {
-			redisTemplate.delete(key);
+			redisTemplate.delete(key + "_lock");
 		}
 	}else {
 		throw new RuntimeException("没有获取事务锁，无法更新新令牌");
