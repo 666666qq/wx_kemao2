@@ -91,7 +91,7 @@ public class WeiXinProxy {
 					// 以POST方式发送请求
 					.POST(BodyPublishers.ofString(json, Charset.forName("UTF-8")))//
 					.build();
-
+  
 			HttpResponse<String> response = httpClient//
 					.send(request, BodyHandlers.ofString(Charset.forName("UTF-8")));
 			LOG.trace("发送客服消息的结果：{}", response.body());

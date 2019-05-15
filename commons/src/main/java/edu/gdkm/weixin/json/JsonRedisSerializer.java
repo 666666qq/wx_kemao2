@@ -35,7 +35,7 @@ public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<Object> {
 			byte[] classNameBytes = new byte[len];
 			in.readFully(classNameBytes);
 			String className = new String(classNameBytes, "UTF-8");
-
+  
 			// Class.forName("com.mysql.jdbc.Driver")
 			@SuppressWarnings("unchecked")
 			Class<Object> cla = (Class<Object>) Class.forName(className);

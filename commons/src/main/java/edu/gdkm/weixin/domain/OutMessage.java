@@ -6,7 +6,7 @@ public abstract class  OutMessage {
 	@JsonProperty("touser")
 	private String toUser;
 	@JsonProperty("msgtype")
-	private String messageType;
+	private String messageType; 
 
 	public OutMessage(String toUser, String messageType) {
 		super();
@@ -30,4 +30,4 @@ public abstract class  OutMessage {
 		this.messageType = messageType;
 	}
 }
-
+ 

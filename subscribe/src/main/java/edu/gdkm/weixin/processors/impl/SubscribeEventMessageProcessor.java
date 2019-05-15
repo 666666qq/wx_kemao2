@@ -44,7 +44,7 @@ public class SubscribeEventMessageProcessor implements EventMessageProcessor{
 				wxUser.setId(user.getId());
 				wxUser.setSubTime(user.getSubTime());
 				
-			}
+			} 
 			wxUser.setStatus(User.Status.IS_SUBSCRIBE);
 			this.userRepository.save(wxUser);
 			this.weiXinProxy.sendText(account,openId ,"终于等到你了，进来玩吧，既然来了就别走了");

@@ -79,7 +79,7 @@ public class UnsubscribeApplication implements //
 		}
 	}catch (NoSuchBeanDefinitionException e) {
 		LOG.trace("当前模块不适合处理{} 消息，没有对应的处理器实现：",msg.getEvent());
-		
+		 
 	}catch (Exception e) {
 		LOG.error("无法处理事件："+e.getLocalizedMessage(), e);
 	}

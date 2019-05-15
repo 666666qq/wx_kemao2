@@ -11,7 +11,7 @@ public class TextOutMessage extends OutMessage {
 		this.text = new TextContent(text);
 	}
 
-	public TextContent getText() {
+	public TextContent getText() { 
 		return text;
 	}
 

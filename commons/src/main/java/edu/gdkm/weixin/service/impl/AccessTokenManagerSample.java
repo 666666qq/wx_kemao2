@@ -104,7 +104,7 @@ public class AccessTokenManagerSample implements AccessTokenManager{
 				msg.setStatus(1);
 			}
 			
-			if(msg.getStatus()==1) {
+			if(msg.getStatus()==1) { 
 				
 				return (ResponseToken) msg;
 			}
