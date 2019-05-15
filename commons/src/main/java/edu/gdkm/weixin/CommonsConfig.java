@@ -50,6 +50,17 @@ public interface CommonsConfig extends
 		return template;
 	}
 	
+	@Bean 
+	public default <T> RedisTemplate<String, T> redisTemplate(//
+			@Autowired RedisConnectionFactory connectionFactory) {
+
+		RedisTemplate<String, T> template = new RedisTemplate<>();
+		template.setConnectionFactory(connectionFactory);
+		// 使用序列化程序完成对象的序列化和反序列化，可以自定义
+		template.setValueSerializer(new JsonRedisSerializer<InMessage>());
+
+		return template;
+	}
 	
 
 	

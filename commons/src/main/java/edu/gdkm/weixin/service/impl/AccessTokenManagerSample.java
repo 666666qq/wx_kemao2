@@ -6,7 +6,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
+import javax.management.RuntimeErrorException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,11 +26,48 @@ import edu.gdkm.weixin.service.AccessTokenManager;
 @Service
 public class AccessTokenManagerSample implements AccessTokenManager{
 	
+	private static final Logger LOG= LoggerFactory.getLogger(AccessTokenManagerSample.class);
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
+	@Autowired
+	@Qualifier("redisTemplate")
+	private RedisTemplate<String, ResponseToken> redisTemplate;
+	
 	@Override
 	public String getToken(String account) throws RuntimeException {
+		String key = "wx_access_token" ;
+		ResponseToken token = redisTemplate.boundValueOps(key).get();
+		if(token == null) {
+			LOG.trace("数据可没有令牌，需要重新获取");
+			
+			Boolean locked = redisTemplate.boundValueOps(key + "_lock")//
+			.setIfAbsent(new ResponseToken(), 1, TimeUnit.MINUTES);
+			LOG.trace("获取事务锁结束：{ }" ,locked);
+		if(locked != null && locked ==true) {
+			try {	
+				token = redisTemplate.boundValueOps(key).get();
+				if(token == null) {
+					LOG.trace("调用远程接口获取令牌");
+					token = getResponseToken(account);
+					
+					 redisTemplate.boundValueOps(key).set(token,token.getExpiresIn(), TimeUnit.SECONDS);
+				}
+				
+		}finally {
+			redisTemplate.delete(key);
+		}
+	}else {
+		throw new RuntimeException("没有获取事务锁，无法更新新令牌");
+		}
+	}
+		return token.getToke();
+		
+	}
+		
+	private ResponseToken getResponseToken (String account) {
+		
+
 		// TODO Auto-generated method stub
 		
 		String appid = "wx71fa6ec220145916";
@@ -46,6 +91,7 @@ public class AccessTokenManagerSample implements AccessTokenManager{
 			HttpResponse<String> response = hc.send(request, BodyHandlers.ofString(Charset.forName("UTF-8")));
 			
 			String body = response.body();
+			LOG.trace("调用远程接口返回值：\n{}", body);
 			
 			if(body.contains("errcode")) {
 				
@@ -59,7 +105,8 @@ public class AccessTokenManagerSample implements AccessTokenManager{
 			}
 			
 			if(msg.getStatus()==1) {
-				return ((ResponseToken) msg).getToke();
+				
+				return (ResponseToken) msg;
 			}
 			
 		} catch (Exception e) {
@@ -70,9 +117,9 @@ public class AccessTokenManagerSample implements AccessTokenManager{
 		+"错误代码="+((ResponseError) msg).getErrorCode()
 		+ ",错误信息= "+((ResponseError) msg).getErrorMessage());
 		
-		
+	}
 	
 		
 	}
 
-}
+
