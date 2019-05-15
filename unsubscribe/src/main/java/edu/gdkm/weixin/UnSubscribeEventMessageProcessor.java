@@ -21,7 +21,7 @@ public class UnSubscribeEventMessageProcessor implements EventMessageProcessor{
 	@Override
 	@Transactional
 	public void onMessage(EventinMessage msg) {
-		if(msg.getEvent().equals("subscribe")) {
+		if(msg.getEvent().equals("unsubscribe")) {
 		System.out.println("取消关注消息处理器： "+ msg);
 		//解除用户关注状态
 		//一般不删除数据，标记已经取消关注
