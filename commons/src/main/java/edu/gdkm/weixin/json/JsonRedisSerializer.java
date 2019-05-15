@@ -13,17 +13,20 @@ import org.springframework.data.redis.serializer.SerializationException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonRedisSerializer<T> extends Jackson2JsonRedisSerializer<T> {
+public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<Object> {
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@SuppressWarnings("unchecked")
 	public JsonRedisSerializer() {
-		super((Class<T>) InMessage.class);
+		super(Object.class);
 	}
 
 	@Override
-	public T deserialize(byte[] bytes) throws SerializationException {
+	public Object deserialize(byte[] bytes) throws SerializationException {
+		if(bytes == null) {
+			return null;
+		}
 		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 		DataInputStream in = new DataInputStream(bis);
 		try {
@@ -35,8 +38,8 @@ public class JsonRedisSerializer<T> extends Jackson2JsonRedisSerializer<T> {
 
 			// Class.forName("com.mysql.jdbc.Driver")
 			@SuppressWarnings("unchecked")
-			Class<T> cla = (Class<T>) Class.forName(className);
-			T o = objectMapper.readValue(Arrays.copyOfRange(bytes, len + 4, bytes.length), cla);
+			Class<Object> cla = (Class<Object>) Class.forName(className);
+			Object o = objectMapper.readValue(Arrays.copyOfRange(bytes, len + 4, bytes.length), cla);
 			return o;
 
 		} catch (IOException | ClassNotFoundException e) {

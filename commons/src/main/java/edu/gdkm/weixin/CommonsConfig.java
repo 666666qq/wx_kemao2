@@ -45,7 +45,7 @@ public interface CommonsConfig extends
 		RedisTemplate<String, ? extends InMessage> template = new RedisTemplate<>();
 		template.setConnectionFactory(connectionFactory);
 		// 使用序列化程序完成对象的序列化和反序列化，可以自定义
-		template.setValueSerializer(new JsonRedisSerializer<InMessage>());
+		template.setValueSerializer(new JsonRedisSerializer());
 
 		return template;
 	}
@@ -57,7 +57,7 @@ public interface CommonsConfig extends
 		RedisTemplate<String, T> template = new RedisTemplate<>();
 		template.setConnectionFactory(connectionFactory);
 		// 使用序列化程序完成对象的序列化和反序列化，可以自定义
-		template.setValueSerializer(new JsonRedisSerializer<InMessage>());
+		template.setValueSerializer(new JsonRedisSerializer());
 
 		return template;
 	}

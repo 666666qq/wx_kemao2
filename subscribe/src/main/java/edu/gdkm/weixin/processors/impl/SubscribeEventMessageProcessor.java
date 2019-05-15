@@ -47,10 +47,11 @@ public class SubscribeEventMessageProcessor implements EventMessageProcessor{
 			}
 			wxUser.setStatus(User.Status.IS_SUBSCRIBE);
 			this.userRepository.save(wxUser);
-			
 			this.weiXinProxy.sendText(account,openId ,"终于等到你了，进来玩吧，既然来了就别走了");
 		}
 		 
+		
+	
 		//调用远程接口
 		//信息保存数据库
 		
